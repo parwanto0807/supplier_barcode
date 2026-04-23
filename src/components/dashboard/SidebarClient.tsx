@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { signOut } from "next-auth/react"
 import { 
   LayoutDashboard, 
   Package, 
@@ -42,6 +43,10 @@ export function SidebarClient({ user }: { user: any }) {
     const newState = !isCollapsed
     setIsCollapsed(newState)
     localStorage.setItem("sidebar-collapsed", String(newState))
+  }
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/login" })
   }
 
   return (
@@ -101,26 +106,20 @@ export function SidebarClient({ user }: { user: any }) {
 
       {/* Bottom Section: User Info (Optional hidden) & Logout */}
       <div className="p-4 mt-auto border-t border-slate-100 dark:border-slate-800">
-        <form
-          action="/api/auth/signout"
-          method="POST"
-          className="w-full"
+        <button 
+          onClick={handleSignOut}
+          className={`flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-2xl transition-all font-black uppercase text-xs tracking-widest w-full relative group
+            ${isCollapsed ? "justify-center" : "justify-start"}`}
         >
-          <button 
-            type="submit"
-            className={`flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-2xl transition-all font-black uppercase text-xs tracking-widest w-full
-              ${isCollapsed ? "justify-center" : "justify-start"}`}
-          >
-            <LogOut className="w-5 h-5 flex-shrink-0" />
-            {!isCollapsed && <span className="animate-in fade-in duration-300">Log Out</span>}
-            
-            {isCollapsed && (
-              <div className="absolute left-full ml-4 px-3 py-2 bg-red-600 text-white text-xs font-black rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all translate-x-[-10px] group-hover:translate-x-0 z-50 whitespace-nowrap">
-                Log Out
-              </div>
-            )}
-          </button>
-        </form>
+          <LogOut className="w-5 h-5 flex-shrink-0" />
+          {!isCollapsed && <span className="animate-in fade-in duration-300">Log Out</span>}
+          
+          {isCollapsed && (
+            <div className="absolute left-full ml-4 px-3 py-2 bg-red-600 text-white text-xs font-black rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all translate-x-[-10px] group-hover:translate-x-0 z-50 whitespace-nowrap">
+              Log Out
+            </div>
+          )}
+        </button>
       </div>
     </aside>
   )
