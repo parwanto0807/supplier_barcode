@@ -76,7 +76,7 @@ export function SidebarClient({ user }: { user: any }) {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 space-y-2 overflow-y-auto scrollbar-hide">
-        {menuItems.map((item) => (
+        {menuItems.map((item: any) => (
           <a
             key={item.label}
             href={item.href}

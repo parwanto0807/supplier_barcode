@@ -42,7 +42,7 @@ export default function SupplierList({ initialSuppliers }: { initialSuppliers: a
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {initialSuppliers.map((supplier) => (
+        {initialSuppliers.map((supplier: any) => (
           <div key={supplier.id} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-all group">
             <div className="flex items-start justify-between mb-4">
               <div className="p-3 bg-indigo-50 rounded-xl text-indigo-600">

@@ -83,7 +83,7 @@ export default function SyncModal({ onClose, supplierId }: { onClose: () => void
                 <p className="text-sm font-medium">Menghubungkan ke MySQL...</p>
               </div>
             ) : results.length > 0 ? (
-              results.map((item, index) => (
+              results.map((item: any, index: number) => (
                 <div key={`${item.partNumber}-${index}`} className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:border-indigo-200 hover:shadow-sm transition-all group">
                   <div className="flex items-center gap-4">
                     <div className="p-2 bg-slate-50 rounded-xl text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-500 transition-colors">

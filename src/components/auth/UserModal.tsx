@@ -103,7 +103,7 @@ export default function UserModal({ user, suppliers, onClose }: UserModalProps) 
                   className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all font-medium bg-white text-slate-900"
                 >
                   <option value="">Select Company...</option>
-                  {suppliers.map((s) => (
+                  {suppliers.map((s: any) => (
                     <option key={s.id} value={s.id}>{s.name} ({s.code})</option>
                   ))}
                 </select>

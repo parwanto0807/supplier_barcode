@@ -51,7 +51,7 @@ export default function UserList({ initialUsers, suppliers }: { initialUsers: an
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">
-            {initialUsers.map((user) => (
+            {initialUsers.map((user: any) => (
               <tr key={user.id} className="hover:bg-slate-50/50 transition-colors group">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">

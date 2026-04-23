@@ -79,7 +79,7 @@ export default async function DashboardPage() {
           { label: "Total Cetak QR", value: totalItems, icon: Activity, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-500/10" },
           { label: "Total Part Set", value: totalSets, icon: Layers, color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-500/10" },
           { label: "Total User", value: totalUsers, icon: Users, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-500/10" },
-        ].map((stat, i) => (
+        ].map((stat: any, i: number) => (
           <div key={i} className="group bg-white dark:bg-slate-900 p-7 rounded-[32px] shadow-sm dark:shadow-none border border-slate-100 dark:border-slate-800 hover:shadow-xl dark:hover:border-indigo-500/50 hover:-translate-y-1 transition-all duration-300">
             <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
               <stat.icon className="w-7 h-7" />
@@ -140,7 +140,7 @@ export default async function DashboardPage() {
         <div className="space-y-8">
           {/* Quick Menu */}
           <div className="grid grid-cols-2 gap-4">
-            {shortcuts.map((menu, i) => (
+            {shortcuts.map((menu: any, i: number) => (
               <Link 
                 key={i} 
                 href={menu.href}

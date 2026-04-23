@@ -356,7 +356,7 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
                   "Gunakan sticker thermal standar",
                   "Cek kesesuaian Lot produksi",
                   "1 label = 1 pack fisik"
-                ].map((txt, i) => (
+                ].map((txt: string, i: number) => (
                   <li key={i} className="flex items-center gap-2 text-[9px] font-bold text-indigo-100">
                     <div className="w-1 h-1 rounded-full bg-indigo-300" />
                     {txt}
