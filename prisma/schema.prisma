@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPER_ADMIN
+  SUPPLIER
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String
+  role          Role      @default(SUPPLIER)
+  supplierId    String?
+  supplier      Supplier?  @relation(fields: [supplierId], references: [id])
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Supplier {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  code      String   @unique // Example: SUP-001
+  address   String?
+  phone     String?
+  users     User[]
+  items     Item[]
+  partSets  PartSet[]
+  products  Product[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PartSet {
+  id          String    @id @default(cuid())
+  nameSet     String
+  supplierId  String
+  supplier    Supplier  @relation(fields: [supplierId], references: [id])
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([nameSet, supplierId]) // Unique per supplier
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  partNumber  String
+  partName    String
+  unit        String   // Satuan (pcs, box, etc.)
+  partSetId   String?
+  partSet     PartSet? @relation(fields: [partSetId], references: [id])
+  supplierId  String
+  supplier    Supplier @relation(fields: [supplierId], references: [id])
+  items       Item[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([partNumber, supplierId]) // Unique per supplier
+}
+
+model Item {
+  id          String   @id @default(cuid())
+  barcode     String
+  stock       Int      @default(0) // Global stock reference
+  qty         Int      @default(1) // Qty per box
+  totalQty    Int      @default(0) // Total production qty
+  labelCount  Int      @default(1) // Number of labels in this batch
+  customer    String?  // Yamaha / Honda
+  inspector   String?
+  noLotSpk    String?  // Consolidated Lot/SPK
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id])
+  supplierId  String
+  supplier    Supplier @relation(fields: [supplierId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
