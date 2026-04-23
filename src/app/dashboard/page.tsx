@@ -1,4 +1,4 @@
-import { auth } from "@/auth" // deployment-trigger-3
+import { auth } from "@/auth"
 import prisma from "@/lib/prisma"
 import Link from "next/link"
 import { 
@@ -109,7 +109,7 @@ export default async function DashboardPage() {
             </div>
             <div className="p-8">
               <div className="space-y-7">
-                {recentAdds.length > 0 ? recentAdds.map((item: any, i) => (
+                {recentAdds.length > 0 ? recentAdds.map((item: any, i: number) => (
                    <div key={item.id} className="flex items-center justify-between group">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-500/20 group-hover:text-indigo-500 transition-colors">
