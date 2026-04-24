@@ -46,7 +46,7 @@ export default function PartSetListClient({ initialPartSets, suppliers, userRole
           </div>
           <button 
             onClick={handleAdd} 
-            className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all hover:-translate-y-0.5 active:translate-y-0 text-sm italic"
+            className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white font-black rounded-xl shadow-lg shadow-indigo-200 dark:shadow-none hover:bg-indigo-700 transition-all text-[10px] uppercase tracking-widest"
           >
             <PlusCircle className="w-5 h-5" />
             Tambah Set
@@ -60,11 +60,11 @@ export default function PartSetListClient({ initialPartSets, suppliers, userRole
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800">
-                <th className="px-8 py-5 text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Part Set Name</th>
-                <th className="px-6 py-5 text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Supplier</th>
-                <th className="px-6 py-5 text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Produk Terkait</th>
-                <th className="px-6 py-5 text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Tgl Dibuat</th>
-                <th className="px-8 py-5 text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-right">Aksi</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Part Set Name</th>
+                <th className="px-6 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Supplier</th>
+                <th className="px-6 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Produk Terkait</th>
+                <th className="px-6 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Tgl Dibuat</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-right">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50 dark:divide-slate-800/50">
@@ -75,7 +75,7 @@ export default function PartSetListClient({ initialPartSets, suppliers, userRole
                       <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center">
                         <LayoutGrid className="w-5 h-5" />
                       </div>
-                      <span className="font-bold text-slate-900 dark:text-white text-lg tracking-tight">{set.nameSet}</span>
+                      <span className="font-black text-slate-900 dark:text-white text-base tracking-tight">{set.nameSet}</span>
                     </div>
                   </td>
                   <td className="px-6 py-5">
@@ -100,20 +100,20 @@ export default function PartSetListClient({ initialPartSets, suppliers, userRole
                     </div>
                   </td>
                   <td className="px-8 py-5 text-right">
-                    <div className="flex items-center justify-end gap-2 outline-none">
+                    <div className="flex items-center justify-end gap-2">
                       <button 
                         onClick={() => handleEdit(set)} 
-                        className="p-2.5 text-slate-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-xl transition-all"
-                        title="Edit Set"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest rounded-lg border border-indigo-100 dark:border-indigo-500/20 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-all"
                       >
-                        <Edit className="w-5 h-5" />
+                        <Edit className="w-3.5 h-3.5" />
+                        Edit
                       </button>
                       <button 
                         onClick={async () => { if(confirm("Hapus set ini? Semua produk di dalamnya akan menjadi 'No Set'.")) await deletePartSet(set.id) }} 
-                        className="p-2.5 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all"
-                        title="Hapus Set"
+                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 text-[10px] font-black uppercase tracking-widest rounded-lg border border-red-100 dark:border-red-500/20 hover:bg-red-100 dark:hover:bg-red-500/20 transition-all"
                       >
-                        <Trash2 className="w-5 h-5" />
+                        <Trash2 className="w-3.5 h-3.5" />
+                        Delete
                       </button>
                     </div>
                   </td>

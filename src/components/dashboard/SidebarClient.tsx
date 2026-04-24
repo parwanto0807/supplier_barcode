@@ -17,7 +17,7 @@ import {
 } from "lucide-react"
 
 export function SidebarClient({ user }: { user: any }) {
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(true)
   const isAdmin = (user as any)?.role === "SUPER_ADMIN"
 
   const menuItems = [
@@ -51,7 +51,7 @@ export function SidebarClient({ user }: { user: any }) {
 
   return (
     <aside 
-      className={`relative h-screen bg-white dark:bg-[#0f172a] border-r border-slate-200 dark:border-slate-800 transition-all duration-500 ease-in-out flex flex-col z-30
+      className={`relative h-screen bg-white dark:bg-[#0f172a] border-r border-slate-200 dark:border-slate-800 transition-all duration-500 ease-in-out flex flex-col z-40
         ${isCollapsed ? "w-20" : "w-72"}`}
     >
       {/* Toggle Button */}
@@ -80,7 +80,7 @@ export function SidebarClient({ user }: { user: any }) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 space-y-2 overflow-y-auto scrollbar-hide">
+      <nav className={`flex-1 px-3 space-y-2 scrollbar-hide ${isCollapsed ? "overflow-visible" : "overflow-y-auto"}`}>
         {menuItems.map((item: any) => (
           <a
             key={item.label}
