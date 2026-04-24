@@ -311,7 +311,17 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
           </div>
           
           <div className="p-6 flex flex-col items-center">
-            {generatedItems && generatedItems.length > 0 ? (
+            {loading ? (
+              <div className="w-full space-y-4 animate-pulse">
+                <div className="w-full aspect-square bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center">
+                  <Loader2 className="w-8 h-8 text-slate-300 animate-spin" />
+                </div>
+                <div className="space-y-3">
+                  <div className="h-14 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800"></div>
+                  <div className="h-12 bg-slate-200 dark:bg-slate-800 rounded-xl"></div>
+                </div>
+              </div>
+            ) : generatedItems && generatedItems.length > 0 ? (
               <div className="w-full space-y-4 animate-in zoom-in-95 duration-500">
                 <div className="p-4 bg-white rounded-2xl shadow-inner border border-slate-100 flex items-center justify-center group overflow-hidden relative">
                   <QRCodeSVG value={generatedItems[0].barcode} size={180} level="H" />
