@@ -31,7 +31,7 @@ export const LABEL_CSS = `
     display: grid; 
     grid-template-columns: repeat(3, calc(65mm - 16px)); 
     grid-auto-rows: calc(26mm - 6px);
-    gap: 12px; 
+    gap: 18.7px 12px; 
     padding: 5mm 0mm;
     box-sizing: border-box;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
