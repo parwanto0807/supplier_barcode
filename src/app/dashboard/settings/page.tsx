@@ -11,7 +11,7 @@ export default async function SettingsPage() {
   const isAdmin = user?.role === "SUPER_ADMIN"
 
   const [users, suppliers] = await Promise.all([
-    isAdmin ? prisma.user.findMany({ orderBy: { createdAt: "desc" } }) : [],
+    isAdmin ? prisma.user.findMany({ include: { supplier: true }, orderBy: { createdAt: "desc" } }) : [],
     prisma.supplier.findMany({ orderBy: { name: "asc" } }),
   ])
 

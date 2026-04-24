@@ -47,6 +47,8 @@ export default function UserList({ initialUsers, suppliers }: { initialUsers: an
             <tr className="bg-slate-50 border-b border-slate-100">
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">User</th>
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Role</th>
+              <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Supplier Code</th>
+              <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Password</th>
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
             </tr>
           </thead>
@@ -75,6 +77,16 @@ export default function UserList({ initialUsers, suppliers }: { initialUsers: an
                   }`}>
                     <Shield className="w-3.5 h-3.5" />
                     {user.role}
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <p className="text-sm font-bold text-indigo-600 font-mono">
+                    {user.role === "SUPER_ADMIN" ? "ADMIN" : (user.supplier?.code || "-")}
+                  </p>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-1.5 text-slate-400">
+                    <span className="text-lg">••••••••</span>
                   </div>
                 </td>
                 <td className="px-6 py-4 text-right">

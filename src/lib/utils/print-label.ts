@@ -3,21 +3,22 @@ import QRCode from "qrcode"
 export const LABEL_CSS = `
   @media print {
     @page { 
-      size: 210mm 340mm; 
-      margin: 0; 
+      size: A4; 
+      margin: 0 !important; 
     }
     body { 
-      margin: 0; 
+      margin: 0 !important; 
       padding: 0 !important;
       background: white !important;
       -webkit-print-color-adjust: exact;
     }
     .page-container {
       box-shadow: none !important;
+      padding: 5mm 10mm !important;
     }
   }
   body { 
-    font-family: "Courier New", Courier, monospace; 
+    font-family: 'Inter', system-ui, -apple-system, sans-serif; 
     background: #f1f5f9;
     display: flex;
     justify-content: center;
@@ -28,40 +29,40 @@ export const LABEL_CSS = `
     width: 210mm; 
     height: auto;
     display: grid; 
-    grid-template-columns: repeat(3, 65mm); 
-    grid-auto-rows: 30mm;
-    gap: 12px; 
+    grid-template-columns: repeat(3, calc(65mm - 16px)); 
+    grid-auto-rows: 26mm;
+    gap: 17.3px; 
     padding: 5mm 0mm;
     box-sizing: border-box;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     justify-content: center;
     overflow: hidden;
   }
   .label-container { 
     border: 0.5px solid #000; 
-    width: 65mm; 
-    height: 30mm; 
+    width: calc(65mm - 16px); 
+    height: 26mm; 
     box-sizing: border-box; 
     overflow: hidden; 
     page-break-inside: avoid; 
-    border-radius: 2mm; 
+    border-radius: 1mm; 
     position: relative;
   }
-  .header { text-align: center; font-weight: bold; border-bottom: 0.3px solid #000; padding: 1px; font-size: 9px; }
+  .header { text-align: center; font-weight: 800; border-bottom: 0.15px solid #000; padding: 2px; font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.5px; }
   table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-  td { border: 0.3px solid #000; padding: 1.5px 2px; font-size: 8px; vertical-align: middle; overflow: hidden; white-space: nowrap; }
+  td { border: 0.15px solid #000; padding: 0.8px 2px; font-size: 7.5px; vertical-align: middle; overflow: hidden; white-space: nowrap; line-height: 1.1; }
   .label-cell { width: 19mm; font-weight: bold; }
-  .qr-cell { width: 19mm; border-left: 0.3px solid #000; text-align: center; padding: 1px; vertical-align: middle; }
-  .qr-cell svg { width: 15.5mm; height: 15.5mm; }
+  .qr-cell { width: 15mm; border-left: 0.05px solid #000; text-align: center; padding: 1px; vertical-align: middle; }
+  .qr-cell svg { width: 11.5mm; height: 11.5mm; }
   .qr-cell-honda { 
     width: 15mm; 
-    border-left: 0.3px solid #000; 
+    border-left: 0.15px solid #000; 
     text-align: center; 
     vertical-align: middle; 
     padding: 1px;
   }
-  .qr-cell-honda svg { width: 14mm; height: 14mm; }
-  .honda-table td { height: 3.6mm; padding: 1px 2px; }
+  .qr-cell-honda svg { width: 12mm; height: 12mm; }
+  .honda-table td { height: 3.2mm; padding: 0.5px 2px; }
   .checkboxes { display: flex; gap: 1px; align-items: center; }
   .check-item { display: flex; align-items: center; gap: 0.5mm; }
   .box { 
@@ -180,39 +181,33 @@ export async function printLabels(items: any[]) {
   if (!printWindow) return
 
   let allLabelsHtml = ""
-  const dateCode = new Date().toISOString().slice(0, 10).replace(/-/g, "") // YYYYMMDD
-  
+
   for (const item of items) {
     const labelCount = item.labelCount || 1
     const qtyPerLabel = item.qty
     const totalQty = item.totalQty || (qtyPerLabel * labelCount)
 
     for (let i = 0; i < labelCount; i++) {
-       // Calculation for the current label quantity
-      const currentQty = (i === labelCount - 1) 
-        ? (totalQty % qtyPerLabel || qtyPerLabel) 
+      const currentQty = (i === labelCount - 1)
+        ? (totalQty % qtyPerLabel || qtyPerLabel)
         : qtyPerLabel
 
-      // Re-construct barcode based on customer
       let specificBarcode = ""
       if (item.customer === "Honda") {
-        // Honda Format: PartNumber|1201591|qty|noLot
         specificBarcode = `${item.product.partNumber}|1201591|${currentQty}|${item.noLotSpk}`
       } else {
-        // Yamaha Format: PartNumber Qty NoLotSpk
         specificBarcode = `${item.product.partNumber} ${currentQty} ${item.noLotSpk}`
       }
 
-      // Generate QR SVG string
       const qrSvg = await QRCode.toString(specificBarcode, {
         type: 'svg',
         margin: 0,
-        width: item.customer === "Honda" ? 64 : 128, // Higher resolution
+        width: item.customer === "Honda" ? 64 : 128,
         color: { dark: '#000000', light: '#ffffff' }
       })
 
       const labelItem = { ...item, qty: currentQty }
-      
+
       if (item.customer === "Honda") {
         allLabelsHtml += renderHondaLabelHtml(labelItem, qrSvg)
       } else {
@@ -224,7 +219,10 @@ export async function printLabels(items: any[]) {
   printWindow.document.write(`
     <html>
       <head>
-        <title>Print Labels</title>
+        <title></title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
         <style>${LABEL_CSS}</style>
       </head>
       <body>
