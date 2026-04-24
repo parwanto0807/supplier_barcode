@@ -72,7 +72,7 @@ export const LABEL_CSS = `
     width: 3.5mm; 
     height: 2.2mm; 
     border: 0.3px solid #000; 
-    font-size: 4px; 
+    font-size: 6.5px; 
     font-weight: bold;
     line-height: 1;
   }
@@ -105,7 +105,7 @@ export const renderHondaLabelHtml = (item: any, qrSvg: string) => {
         </tr>
         <tr>
           <td class="label-cell">Tgl. Packing</td>
-          <td colspan="2">: ${new Date(item.createdAt).toLocaleString("id-ID", { hour12: true })}</td>
+          <td colspan="2">: </td>
         </tr>
         <tr>
           <td class="label-cell">Inspector</td>
@@ -165,7 +165,7 @@ export const renderLabelHtml = (item: any, qrSvg: string) => {
         </tr>
         <tr>
           <td class="label-cell">Tgl. Packing</td>
-          <td style="border-right: none;">: ${new Date(item.createdAt).toLocaleDateString("id-ID")}</td>
+          <td style="border-right: none;">: </td>
         </tr>
         <tr>
           <td class="label-cell">Opr. Packing</td>
