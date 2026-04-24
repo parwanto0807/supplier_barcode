@@ -14,7 +14,8 @@ export const LABEL_CSS = `
     }
     .page-container {
       box-shadow: none !important;
-      padding: 5mm 10mm !important;
+      padding: 5mm 5mm 5mm 15mm !important;
+      justify-content: start !important;
     }
   }
   body { 
@@ -48,7 +49,7 @@ export const LABEL_CSS = `
     border-radius: 1mm; 
     position: relative;
   }
-  .header { text-align: center; font-weight: 800; border-bottom: 0.15px solid #000; padding: 2px; font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .header { text-align: center; font-weight: 800; border-bottom: 0.05px solid #000; padding: 2px; font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.5px; }
   table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   td { border: 0.15px solid #000; padding: 0.8px 2px; font-size: 7.5px; vertical-align: middle; overflow: hidden; white-space: nowrap; line-height: 1.1; }
   .label-cell { width: 19mm; font-weight: bold; }
