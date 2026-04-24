@@ -55,14 +55,14 @@ export const LABEL_CSS = `
   .qr-cell { width: 15mm; border-left: 0.05px solid #000; text-align: center; padding: 1px; vertical-align: middle; }
   .qr-cell svg { width: calc(11.5mm - 1px); height: calc(11.5mm - 1px); }
   .qr-cell-honda { 
-    width: 15mm; 
+    width: 11mm; 
     border-left: 0.15px solid #000; 
-    text-align: center; 
+    text-align: right; 
     vertical-align: middle; 
     padding: 1px;
   }
-  .qr-cell-honda svg { width: calc(12mm - 1px); height: calc(12mm - 1px); }
-  .honda-table td { height: 3.2mm; padding: 0.5px 2px; }
+  .qr-cell-honda svg { width: 11mm; height: 11mm; }
+  .honda-table td { padding: 0.8px 2px; }
   .checkboxes { display: flex; gap: 1px; align-items: center; }
   .check-item { display: flex; align-items: center; gap: 0.5mm; }
   .box { 
@@ -111,9 +111,9 @@ export const renderHondaLabelHtml = (item: any, qrSvg: string) => {
           <td class="label-cell">Inspector</td>
           <td colspan="2">
             <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-              <span>: ${item.inspector}</span>
+              <span style="font-weight: 600;">: ${item.inspector}</span>
               <div style="display: flex; align-items: center; gap: 4px;">
-                <span style="font-size: 7.5px;">Status Part:</span>
+                <span style="font-weight: bold;">Status Part:</span>
                 <span class="box checked">OK</span>
               </div>
             </div>
