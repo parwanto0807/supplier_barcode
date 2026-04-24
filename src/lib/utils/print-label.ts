@@ -14,8 +14,7 @@ export const LABEL_CSS = `
     }
     .page-container {
       box-shadow: none !important;
-      padding: 5mm 5mm 5mm 15mm !important;
-      justify-content: start !important;
+      padding: 5mm 10mm !important;
     }
   }
   body { 
@@ -31,8 +30,8 @@ export const LABEL_CSS = `
     height: auto;
     display: grid; 
     grid-template-columns: repeat(3, calc(65mm - 16px)); 
-    grid-auto-rows: 26mm;
-    gap: 17.3px; 
+    grid-auto-rows: calc(26mm - 6px);
+    gap: 12px; 
     padding: 5mm 0mm;
     box-sizing: border-box;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -42,19 +41,19 @@ export const LABEL_CSS = `
   .label-container { 
     border: 0.5px solid #000; 
     width: calc(65mm - 16px); 
-    height: 26mm; 
+    height: calc(26mm - 6px); 
     box-sizing: border-box; 
     overflow: hidden; 
     page-break-inside: avoid; 
     border-radius: 1mm; 
     position: relative;
   }
-  .header { text-align: center; font-weight: 800; border-bottom: 0.05px solid #000; padding: 2px; font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .header { text-align: center; font-weight: 800; border-bottom: 0.05px solid #000; padding: 0px 2px; font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.5px; }
   table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   td { border: 0.15px solid #000; padding: 0.8px 2px; font-size: 7.5px; vertical-align: middle; overflow: hidden; white-space: nowrap; line-height: 1.1; }
   .label-cell { width: 19mm; font-weight: bold; }
   .qr-cell { width: 15mm; border-left: 0.05px solid #000; text-align: center; padding: 1px; vertical-align: middle; }
-  .qr-cell svg { width: 11.5mm; height: 11.5mm; }
+  .qr-cell svg { width: calc(11.5mm - 1px); height: calc(11.5mm - 1px); }
   .qr-cell-honda { 
     width: 15mm; 
     border-left: 0.15px solid #000; 
@@ -62,7 +61,7 @@ export const LABEL_CSS = `
     vertical-align: middle; 
     padding: 1px;
   }
-  .qr-cell-honda svg { width: 12mm; height: 12mm; }
+  .qr-cell-honda svg { width: calc(12mm - 1px); height: calc(12mm - 1px); }
   .honda-table td { height: 3.2mm; padding: 0.5px 2px; }
   .checkboxes { display: flex; gap: 1px; align-items: center; }
   .check-item { display: flex; align-items: center; gap: 0.5mm; }
