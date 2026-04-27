@@ -25,10 +25,10 @@ export default async function GeneratePage() {
   ])
 
   return (
-    <div className="w-full space-y-8 px-4">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Cetak Barcode</h1>
-        <p className="text-slate-500 font-medium font-outfit">Input detail produksi untuk menerbitkan label QR Code unik.</p>
+    <div className="w-full space-y-3">
+      <div className="flex flex-col gap-0.5">
+        <h1 className="text-base font-bold text-slate-900 tracking-tight">Cetak Barcode</h1>
+        <p className="text-slate-500 text-xs font-medium font-outfit hidden sm:block">Input detail produksi untuk menerbitkan label QR Code unik.</p>
       </div>
 
       <QRGenerator 

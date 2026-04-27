@@ -24,10 +24,10 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="space-y-10">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Settings</h1>
-        <p className="text-slate-500 font-medium">Manage system configuration and external connections.</p>
+    <div className="space-y-6">
+      <div className="flex flex-col gap-0.5">
+        <h1 className="text-lg font-bold text-slate-900 tracking-tight">Settings</h1>
+        <p className="text-slate-500 text-xs font-medium">Manage system configuration and external connections.</p>
       </div>
 
       {/* Dynamic Database Connection Manager */}
@@ -35,12 +35,12 @@ export default async function SettingsPage() {
 
       {/* User Management restricted to Admin */}
       {isAdmin && (
-        <div className="space-y-8 pt-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-amber-100 rounded-lg text-amber-600">
-              <Shield className="w-5 h-5" />
+        <div className="space-y-4 pt-4">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 bg-amber-100 rounded-lg text-amber-600">
+              <Shield className="w-4 h-4" />
             </div>
-            <h2 className="text-xl font-bold text-slate-900">User Management (Super Admin Only)</h2>
+            <h2 className="text-sm font-bold text-slate-900">User Management (Super Admin Only)</h2>
           </div>
           <UserList initialUsers={users} suppliers={suppliers} />
         </div>

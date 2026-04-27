@@ -26,82 +26,68 @@ export default function UserList({ initialUsers, suppliers }: { initialUsers: an
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-4 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-slate-900">User Management</h2>
-          <p className="text-slate-500 mt-1">Manage system administrators and suppliers.</p>
+          <h2 className="text-base font-bold text-slate-900">User Management</h2>
+          <p className="text-slate-500 text-xs mt-0.5 hidden sm:block">Manage system administrators and suppliers.</p>
         </div>
         <button 
           onClick={handleAdd}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all text-xs"
         >
-          <UserPlus className="w-5 h-5" />
-          Add New User
+          <UserPlus className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Add User</span>
+          <span className="sm:hidden">Add</span>
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      {/* ─── DESKTOP TABLE ─── */}
+      <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-100">
-              <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">User</th>
-              <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Role</th>
-              <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Supplier Code</th>
-              <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Password</th>
-              <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+              <th className="px-4 py-3 text-[9px] font-bold text-slate-500 uppercase tracking-wider">User</th>
+              <th className="px-4 py-3 text-[9px] font-bold text-slate-500 uppercase tracking-wider">Role</th>
+              <th className="px-4 py-3 text-[9px] font-bold text-slate-500 uppercase tracking-wider">Supplier</th>
+              <th className="px-4 py-3 text-[9px] font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">
             {initialUsers.map((user: any) => (
               <tr key={user.id} className="hover:bg-slate-50/50 transition-colors group">
-                <td className="px-6 py-4">
+                <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center border border-slate-200">
-                      <UserIcon className="w-5 h-5 text-slate-400" />
+                    <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center border border-slate-200">
+                      <UserIcon className="w-4 h-4 text-slate-400" />
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-900">{user.name || "Unnamed User"}</p>
-                      <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
-                        <Mail className="w-3 h-3" />
-                        {user.email}
+                      <p className="font-semibold text-slate-900 text-xs">{user.name || "Unnamed User"}</p>
+                      <div className="flex items-center gap-1 text-[9px] text-slate-500 mt-0.5">
+                        <Mail className="w-2.5 h-2.5" />{user.email}
                       </div>
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4">
-                  <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
-                    user.role === "SUPER_ADMIN" 
-                    ? "bg-indigo-50 text-indigo-600" 
-                    : "bg-teal-50 text-teal-600"
+                <td className="px-4 py-3">
+                  <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                    user.role === "SUPER_ADMIN" ? "bg-indigo-50 text-indigo-600" : "bg-teal-50 text-teal-600"
                   }`}>
-                    <Shield className="w-3.5 h-3.5" />
-                    {user.role}
+                    <Shield className="w-3 h-3" />{user.role}
                   </div>
                 </td>
-                <td className="px-6 py-4">
-                  <p className="text-sm font-bold text-indigo-600 font-mono">
+                <td className="px-4 py-3">
+                  <p className="text-xs font-bold text-indigo-600 font-mono">
                     {user.role === "SUPER_ADMIN" ? "ADMIN" : (user.supplier?.code || "-")}
                   </p>
                 </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-1.5 text-slate-400">
-                    <span className="text-lg">••••••••</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button 
-                      onClick={() => handleEdit(user)}
-                      className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
-                    >
-                      <Edit className="w-4 h-4" />
+                <td className="px-4 py-3 text-right">
+                  <div className="flex items-center justify-end gap-1.5">
+                    <button onClick={() => handleEdit(user)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">
+                      <Edit className="w-3.5 h-3.5" />
                     </button>
-                    <button 
-                      onClick={() => handleDelete(user.id)}
-                      className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                    >
-                      <Trash2 className="w-4 h-4" />
+                    <button onClick={() => handleDelete(user.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </td>
@@ -109,6 +95,41 @@ export default function UserList({ initialUsers, suppliers }: { initialUsers: an
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* ─── MOBILE CARD LIST ─── */}
+      <div className="md:hidden space-y-2">
+        {initialUsers.map((user: any) => (
+          <div key={user.id} className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+            <div className="flex items-center gap-3 px-4 py-3">
+              <div className="w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center border border-slate-200 flex-shrink-0">
+                <UserIcon className="w-4 h-4 text-slate-400" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-slate-900 text-sm leading-tight">{user.name || "Unnamed User"}</p>
+                <p className="text-[10px] text-slate-500 truncate mt-0.5">{user.email}</p>
+              </div>
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <button onClick={() => handleEdit(user)} className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                  <Edit className="w-3.5 h-3.5" />
+                </button>
+                <button onClick={() => handleDelete(user.id)} className="p-2 bg-red-50 text-red-600 rounded-lg">
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 px-4 pb-3">
+              <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                user.role === "SUPER_ADMIN" ? "bg-indigo-50 text-indigo-600" : "bg-teal-50 text-teal-600"
+              }`}>
+                <Shield className="w-2.5 h-2.5" />{user.role}
+              </div>
+              <span className="text-[9px] font-bold text-indigo-600 font-mono bg-indigo-50 px-2 py-0.5 rounded">
+                {user.role === "SUPER_ADMIN" ? "ADMIN" : (user.supplier?.code || "-")}
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
 
       {isModalOpen && (

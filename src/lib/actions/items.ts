@@ -76,3 +76,23 @@ export async function generateItemQR(formData: FormData) {
   revalidatePath("/dashboard/history")
   return [item]
 }
+
+export async function deleteItem(id: string) {
+  const session = await auth()
+  if (!session) throw new Error("Unauthorized")
+
+  const role = (session.user as any).role
+  const supplierId = (session.user as any).supplierId
+
+  // Verify ownership — supplier can only delete their own items
+  const item = await prisma.item.findUnique({ where: { id } })
+  if (!item) throw new Error("Item not found")
+
+  if (role !== "SUPER_ADMIN" && item.supplierId !== supplierId) {
+    throw new Error("Forbidden")
+  }
+
+  await prisma.item.delete({ where: { id } })
+  revalidatePath("/dashboard/history")
+  revalidatePath("/dashboard")
+}

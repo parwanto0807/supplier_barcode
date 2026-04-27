@@ -25,36 +25,34 @@ export default function PartSetModal({ partSet, suppliers, userRole, onClose }: 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-          <h3 className="font-bold text-slate-900">{isEditing ? "Edit Part Set" : "Add Part Set"}</h3>
-          <button onClick={onClose} className="p-1 hover:bg-slate-100 rounded-lg"><X className="w-5 h-5 text-slate-400" /></button>
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 backdrop-blur-sm">
+      <div className="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom sm:zoom-in-95 duration-300">
+        <div className="w-10 h-1 bg-slate-200 rounded-full mx-auto mt-3 mb-1 sm:hidden" />
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+          <h3 className="font-bold text-slate-900 text-sm">{isEditing ? "Edit Part Set" : "Add Part Set"}</h3>
+          <button onClick={onClose} className="p-1.5 hover:bg-slate-100 rounded-lg"><X className="w-4 h-4 text-slate-400" /></button>
         </div>
-        <form action={handleSubmit} className="p-6 space-y-4">
+        <form action={handleSubmit} className="p-5 space-y-3 max-h-[80vh] overflow-y-auto">
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-slate-700">Set Name</label>
-            <input name="nameSet" defaultValue={partSet?.nameSet} required className="w-full px-4 py-2 border border-slate-200 rounded-xl text-slate-900 font-medium" placeholder="Example: ENGINE SET" />
+            <label className="text-xs font-semibold text-slate-700">Set Name</label>
+            <input name="nameSet" defaultValue={partSet?.nameSet} required className="w-full px-3 py-2 border border-slate-200 rounded-xl text-slate-900 font-medium text-sm" placeholder="Example: ENGINE SET" />
           </div>
-
           {!isEditing && userRole === "SUPER_ADMIN" && (
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-slate-700">Supplier</label>
-              <select name="supplierId" required className="w-full px-4 py-2 border border-slate-200 rounded-xl bg-white text-slate-900 font-medium">
+              <label className="text-xs font-semibold text-slate-700">Supplier</label>
+              <select name="supplierId" required className="w-full px-3 py-2 border border-slate-200 rounded-xl bg-white text-slate-900 font-medium text-sm">
                 <option value="">Select Supplier...</option>
                 {suppliers.map((s: any) => <option key={s.id} value={s.id}>{s.name}</option>)}
               </select>
             </div>
           )}
-
           {userRole !== "SUPER_ADMIN" && (
             <p className="text-xs text-slate-400 italic">This data will be linked to your company.</p>
           )}
-
-          <div className="pt-4 flex gap-3">
-            <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl font-bold text-slate-600">Cancel</button>
-            <button type="submit" disabled={loading} className="flex-[2] px-4 py-2.5 bg-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-indigo-100 flex items-center justify-center gap-2">
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (isEditing ? "Update" : "Create")}
+          <div className="pt-3 flex gap-2">
+            <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl font-bold text-slate-600 text-sm">Cancel</button>
+            <button type="submit" disabled={loading} className="flex-[2] px-4 py-2.5 bg-indigo-600 text-white font-bold rounded-xl flex items-center justify-center gap-2 text-sm">
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : (isEditing ? "Update" : "Create")}
             </button>
           </div>
         </form>
