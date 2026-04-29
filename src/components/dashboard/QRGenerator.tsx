@@ -14,7 +14,8 @@ import {
   Building2,
   Box,
   Hash,
-  AlertCircle
+  AlertCircle,
+  Calendar
 } from "lucide-react"
 import { generateItemQR } from "@/lib/actions/items"
 import { printLabels } from "@/lib/utils/print-label"
@@ -270,6 +271,31 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
                 />
                 <Hash className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
               </div>
+            </div>
+
+            {/* Packing Date */}
+            <div className="space-y-1">
+              <label className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] px-1">Tanggal Packing</label>
+              <div className="relative">
+                <input
+                  form="qr-form"
+                  name="packingDate"
+                  type="date"
+                  required
+                  defaultValue={new Date().toISOString().split('T')[0]}
+                  className="w-full pl-8 pr-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-amber-500 outline-none transition-all text-xs"
+                />
+                <Calendar className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+              </div>
+            </div>
+
+            {/* Toggle Display */}
+            <div className="flex items-center gap-3 pt-3">
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" name="showPackingDate" defaultChecked className="sr-only peer" form="qr-form" value="true" />
+                <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                <span className="ms-2 text-[9px] font-black text-slate-500 uppercase tracking-wider">Tampilkan di Label?</span>
+              </label>
             </div>
           </div>
 

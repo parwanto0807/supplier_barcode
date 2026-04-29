@@ -15,6 +15,8 @@ export async function generateItemQR(formData: FormData) {
   const qtyPerLabel = parseInt(formData.get("qty") as string)
   const totalQty = parseInt(formData.get("totalQty") as string)
   const noLotSpk = formData.get("noLotSpk") as string
+  const packingDate = formData.get("packingDate") as string
+  const showPackingDate = formData.get("showPackingDate") === "true"
   
   const userRole = (session.user as any).userRole || (session.user as any).role
   let supplierId = (session.user as any).supplierId
@@ -47,6 +49,8 @@ export async function generateItemQR(formData: FormData) {
       totalQty,
       labelCount: labelsNeeded,
       noLotSpk,
+      packingDate,
+      showPackingDate,
       stock: totalQty,
     },
     include: {

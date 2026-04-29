@@ -119,7 +119,7 @@ export default async function DashboardPage() {
                   <div className="text-right flex-shrink-0 ml-2">
                     <div className="flex items-center gap-1 text-indigo-600 dark:text-indigo-400 font-bold text-[10px] justify-end">
                       <Clock className="w-3 h-3" />
-                      {new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(item.createdAt).toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit', timeZone: "Asia/Jakarta" })}
                     </div>
                   </div>
                 </div>

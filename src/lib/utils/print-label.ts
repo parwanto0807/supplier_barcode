@@ -79,6 +79,15 @@ export const LABEL_CSS = `
   .box.checked { border-width: 0.5px; }
 `
 
+const formatDate = (dateString?: string) => {
+  if (!dateString) return "";
+  const [year, month, day] = dateString.split("-");
+  if (!year || !month || !day) return dateString;
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthName = months[parseInt(month) - 1];
+  return `${day}-${monthName}-${year}`;
+};
+
 export const renderHondaLabelHtml = (item: any, qrSvg: string) => {
   return `
     <div class="label-container">
@@ -105,7 +114,7 @@ export const renderHondaLabelHtml = (item: any, qrSvg: string) => {
         </tr>
         <tr>
           <td class="label-cell">Tgl. Packing</td>
-          <td colspan="2">: </td>
+          <td colspan="2">: ${item.showPackingDate ? formatDate(item.packingDate) : ""}</td>
         </tr>
         <tr>
           <td class="label-cell">Inspector</td>
@@ -165,7 +174,7 @@ export const renderLabelHtml = (item: any, qrSvg: string) => {
         </tr>
         <tr>
           <td class="label-cell">Tgl. Packing</td>
-          <td style="border-right: none;">: </td>
+          <td style="border-right: none;">: ${item.showPackingDate ? formatDate(item.packingDate) : ""}</td>
         </tr>
         <tr>
           <td class="label-cell">Opr. Packing</td>

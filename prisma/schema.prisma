@@ -77,6 +77,8 @@ model Item {
   customer    String?  // Yamaha / Honda
   inspector   String?
   noLotSpk    String?  // Consolidated Lot/SPK
+  packingDate String?
+  showPackingDate Boolean @default(true)
   productId   String
   product     Product  @relation(fields: [productId], references: [id])
   supplierId  String

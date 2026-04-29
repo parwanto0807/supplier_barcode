@@ -65,6 +65,7 @@ export default async function HistoryPage({ searchParams }: { searchParams: any 
                 <th className="px-4 py-3 text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Product Detail</th>
                 <th className="px-4 py-3 text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Customer</th>
                 <th className="px-4 py-3 text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-center">Qty</th>
+                <th className="px-4 py-3 text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-center">Tgl. Packing</th>
                 <th className="px-4 py-3 text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Produksi</th>
                 {role === "SUPER_ADMIN" && <th className="px-4 py-3 text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Supplier</th>}
                 <th className="px-4 py-3 text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-right">Aksi</th>
@@ -76,7 +77,7 @@ export default async function HistoryPage({ searchParams }: { searchParams: any 
                   <td className="px-4 py-3">
                     <div className="flex flex-col">
                       <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 font-mono tracking-tight uppercase">
-                        {new Date(item.createdAt).toLocaleString("id-ID", { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        {new Date(item.createdAt).toLocaleString("id-ID", { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: "Asia/Jakarta" })}
                       </span>
                       <span className="text-xs font-black text-indigo-600 dark:text-indigo-400 font-mono flex items-center gap-1 mt-0.5">
                         <Tag className="w-3 h-3" />{item.barcode}
@@ -101,6 +102,16 @@ export default async function HistoryPage({ searchParams }: { searchParams: any 
                       {item.totalQty || item.qty} <span className="text-[9px] text-slate-500 uppercase">{item.product.unit}</span>
                     </span>
                     <p className="text-[9px] text-slate-400 font-bold uppercase">{item.labelCount || 1} LBL</p>
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">
+                      {item.packingDate ? (() => {
+                        const [y, m, d] = item.packingDate.split("-");
+                        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        return `${d}-${months[parseInt(m) - 1]}-${y}`;
+                      })() : "-"}
+                    </span>
+                    <p className="text-[8px] font-black text-indigo-500 uppercase tracking-tighter">{item.showPackingDate ? "Visible" : "Hidden"}</p>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1 text-xs text-slate-800 dark:text-slate-200">
@@ -151,7 +162,7 @@ export default async function HistoryPage({ searchParams }: { searchParams: any 
                 <span className="truncate max-w-[160px]">{item.barcode}</span>
               </div>
               <span className="text-[9px] text-slate-400 font-medium">
-                {new Date(item.createdAt).toLocaleString("id-ID", { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                {new Date(item.createdAt).toLocaleString("id-ID", { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: "Asia/Jakarta" })}
               </span>
             </div>
             {/* Card Body */}
