@@ -26,6 +26,10 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
   const [selectedProduct, setSelectedProduct] = useState<any>(null)
   const [totalQty, setTotalQty] = useState(1000)
   const [qtyPerLabel, setQtyPerLabel] = useState(100)
+  
+  // Derive unique part sets from products
+  const partSets = Array.from(new Set(products.map((p: any) => p.partSet?.nameSet).filter(Boolean))).sort() as string[]
+  const [selectedSetName, setSelectedSetName] = useState<string>("")
   const searchParams = useSearchParams()
 
   const initialProductId = searchParams.get("productId")
@@ -38,7 +42,10 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
   useEffect(() => {
     if (initialProductId) {
       const prod = products.find((p: any) => p.id === initialProductId)
-      if (prod) setSelectedProduct(prod)
+      if (prod) {
+        setSelectedProduct(prod)
+        if (prod.partSet?.nameSet) setSelectedSetName(prod.partSet.nameSet)
+      }
     }
     if (initialTotalQty) setTotalQty(parseInt(initialTotalQty))
     if (initialQty) setQtyPerLabel(parseInt(initialQty))
@@ -147,18 +154,41 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
 
           <div className="space-y-3">
             <div className="space-y-1">
+              <label className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] px-1">Pilih Nama Set</label>
+              <div className="relative">
+                <select
+                  value={selectedSetName}
+                  onChange={(e) => {
+                    setSelectedSetName(e.target.value)
+                    setSelectedProduct(null)
+                  }}
+                  className="w-full pl-8 pr-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all appearance-none text-xs"
+                >
+                  <option value="">-- Semua Set / Pilih Set --</option>
+                  {partSets.map((setName) => (
+                    <option key={setName} value={setName}>{setName}</option>
+                  ))}
+                </select>
+                <Package className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+              </div>
+            </div>
+
+            <div className="space-y-1">
               <label className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] px-1">Pilih Part Number</label>
               <div className="relative">
               <select
                 form="qr-form"
                 name="productId"
                 required
-                defaultValue={initialProductId || ""}
+                value={selectedProduct?.id || ""}
                 onChange={(e) => setSelectedProduct(products.find((p: any) => p.id === e.target.value))}
                 className="w-full pl-8 pr-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all appearance-none text-xs"
               >
                 <option value="">-- Choose Part --</option>
-                {products.map((p: any) => (
+                {(selectedSetName 
+                  ? products.filter((p: any) => p.partSet?.nameSet === selectedSetName)
+                  : products
+                ).map((p: any) => (
                   <option key={p.id} value={p.id}>{p.partNumber} — {p.partName}</option>
                 ))}
               </select>
