@@ -96,13 +96,17 @@ export const renderHondaLabelHtml = (item: any, qrSvg: string) => {
         <tr>
           <td class="label-cell">Nama Part</td>
           <td style="border-right: none;">: ${item.product.partName}</td>
-          <td rowspan="3" class="qr-cell-honda">
+          <td rowspan="4" class="qr-cell-honda">
              ${qrSvg}
           </td>
         </tr>
         <tr>
           <td class="label-cell">No. Part</td>
           <td style="border-right: none;">: ${item.product.partNumber}</td>
+        </tr>
+        <tr>
+          <td class="label-cell">Penerima</td>
+          <td style="border-right: none; font-size: 6.5px;">: PT. ASTRA HONDA MOTOR</td>
         </tr>
         <tr>
           <td class="label-cell">Lot Produksi</td>
