@@ -1,9 +1,28 @@
 import QRCode from "qrcode"
 
+interface Product {
+  partName: string
+  partNumber: string
+  unit: string
+}
+
+interface LabelItem {
+  customerName?: string
+  customer?: string
+  product: Product
+  noLotSpk: string
+  qty: number
+  totalQty?: number
+  packingDate?: string
+  showPackingDate: boolean
+  inspector: string
+  labelCount?: number
+}
+
 export const LABEL_CSS = `
   @media print {
     @page { 
-      size: A4; 
+      size: 21cm 34cm; 
       margin: 0 !important; 
     }
     body { 
@@ -14,7 +33,7 @@ export const LABEL_CSS = `
     }
     .page-container {
       box-shadow: none !important;
-      padding: 5mm 10mm !important;
+      padding: 8mm 10mm !important;
     }
   }
   body { 
@@ -88,7 +107,7 @@ const formatDate = (dateString?: string) => {
   return `${day}-${monthName}-${year}`;
 };
 
-export const renderHondaLabelHtml = (item: any, qrSvg: string) => {
+export const renderHondaLabelHtml = (item: LabelItem, qrSvg: string) => {
   const receiver = item.customerName?.trim() || "PT. ASTRA HONDA MOTOR"
   return `
     <div class="label-container">
@@ -138,7 +157,7 @@ export const renderHondaLabelHtml = (item: any, qrSvg: string) => {
   `
 }
 
-export const renderLabelHtml = (item: any, qrSvg: string) => {
+export const renderLabelHtml = (item: LabelItem, qrSvg: string) => {
   const receiver = item.customerName?.trim() || "PT. YAMAHA INDONESIA MOTOR MFG"
   // Existing Yamaha Label
   return `
@@ -190,7 +209,7 @@ export const renderLabelHtml = (item: any, qrSvg: string) => {
   `
 }
 
-export async function printLabels(items: any[]) {
+export async function printLabels(items: LabelItem[]) {
   const printWindow = window.open("", "_blank")
   if (!printWindow) return
 
