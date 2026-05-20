@@ -33,7 +33,7 @@ export const LABEL_CSS = `
     }
     .page-container {
       box-shadow: none !important;
-      padding: 8mm 10mm !important;
+      padding: 4mm 10mm !important;
     }
   }
   body { 
