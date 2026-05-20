@@ -47,7 +47,7 @@ export default function HistoryActions({ item }: { item: any }) {
         </button>
 
         <Link
-          href={`/dashboard/generate?productId=${item.productId}&qty=${item.qty}&totalQty=${item.totalQty}&noLotSpk=${encodeURIComponent(item.noLotSpk)}&inspector=${encodeURIComponent(item.inspector)}&customer=${item.customer}`}
+          href={`/dashboard/generate?productId=${item.productId}&qty=${item.qty}&totalQty=${item.totalQty}&noLotSpk=${encodeURIComponent(item.noLotSpk)}&inspector=${encodeURIComponent(item.inspector)}&customer=${encodeURIComponent(item.customer)}&customerName=${encodeURIComponent(item.customerName || "")}`}
           className="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all"
         >
           <RefreshCcw className="w-3.5 h-3.5" />

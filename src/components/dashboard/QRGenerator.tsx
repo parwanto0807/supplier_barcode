@@ -38,6 +38,8 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
   const initialNoLotSpk = searchParams.get("noLotSpk")
   const initialInspector = searchParams.get("inspector")
   const initialCustomer = searchParams.get("customer")
+  const initialCustomerName = searchParams.get("customerName")
+  const [customerType, setCustomerType] = useState<string>(initialCustomer || "")
 
   useEffect(() => {
     if (initialProductId) {
@@ -127,16 +129,34 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
                 <select
                   name="customer"
                   required
-                  defaultValue={initialCustomer || ""}
+                  value={customerType}
+                  onChange={(e) => setCustomerType(e.target.value)}
                   className="w-full pl-8 pr-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-indigo-500 outline-none transition-all appearance-none text-xs"
                 >
                   <option value="">-- Select Customer --</option>
                   <option value="Yamaha">Yamaha</option>
                   <option value="Honda">Honda</option>
+                  <option value="Other">Other Customer</option>
                 </select>
                 <Building2 className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
               </div>
             </div>
+
+            {customerType === "Other" && (
+              <div className="space-y-1 md:col-span-2">
+                <label className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] px-1">Customer Name</label>
+                <div className="relative">
+                  <input
+                    name="customerName"
+                    defaultValue={initialCustomerName || ""}
+                    required
+                    className="w-full pl-8 pr-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-indigo-500 outline-none transition-all placeholder:text-slate-300 dark:placeholder:text-slate-600 text-xs"
+                    placeholder="Masukkan nama customer lain"
+                  />
+                  <Building2 className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                </div>
+              </div>
+            )}
           </form>
         </section>
 

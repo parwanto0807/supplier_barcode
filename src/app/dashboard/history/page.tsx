@@ -24,6 +24,7 @@ export default async function HistoryPage({ searchParams }: { searchParams: any 
           { product: { partName: { contains: query, mode: "insensitive" as any } } },
           { product: { partNumber: { contains: query, mode: "insensitive" as any } } },
           { customer: { contains: query, mode: "insensitive" as any } },
+          { customerName: { contains: query, mode: "insensitive" as any } },
           { noLotSpk: { contains: query, mode: "insensitive" as any } },
         ]
       } : {}
@@ -94,8 +95,10 @@ export default async function HistoryPage({ searchParams }: { searchParams: any 
                     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest ${
                       item.customer === "Yamaha" 
                         ? "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-500/20" 
-                        : "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-500/20"
-                    }`}>{item.customer}</span>
+                        : item.customer === "Honda"
+                          ? "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-500/20"
+                          : "bg-slate-50 dark:bg-slate-700/10 text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-700/20"
+                    }`}>{item.customerName || item.customer}</span>
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span className="text-xs font-black text-slate-900 dark:text-white">
@@ -175,8 +178,10 @@ export default async function HistoryPage({ searchParams }: { searchParams: any 
                 <span className={`flex-shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest ${
                   item.customer === "Yamaha" 
                     ? "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400" 
-                    : "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400"
-                }`}>{item.customer}</span>
+                    : item.customer === "Honda"
+                      ? "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400"
+                      : "bg-slate-50 dark:bg-slate-700/10 text-slate-700 dark:text-slate-300"
+                }`}>{item.customerName || item.customer}</span>
               </div>
               <div className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">

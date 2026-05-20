@@ -74,7 +74,8 @@ model Item {
   qty         Int      @default(1) // Qty per box
   totalQty    Int      @default(0) // Total production qty
   labelCount  Int      @default(1) // Number of labels in this batch
-  customer    String?  // Yamaha / Honda
+  customer    String?  // Yamaha / Honda / Other
+  customerName String? // Optional actual name for Other customers
   inspector   String?
   noLotSpk    String?  // Consolidated Lot/SPK
   packingDate String?

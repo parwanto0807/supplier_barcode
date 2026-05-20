@@ -12,6 +12,7 @@ export async function generateItemQR(formData: FormData) {
   const productId = formData.get("productId") as string
   const inspector = formData.get("inspector") as string
   const customer = formData.get("customer") as string
+  const customerName = (formData.get("customerName") as string || "").trim()
   const qtyPerLabel = parseInt(formData.get("qty") as string)
   const totalQty = parseInt(formData.get("totalQty") as string)
   const noLotSpk = formData.get("noLotSpk") as string
@@ -31,6 +32,10 @@ export async function generateItemQR(formData: FormData) {
   const product = await prisma.product.findUnique({ where: { id: productId } })
   if (!product) throw new Error("Product not found")
 
+  if (customer === "Other" && !customerName) {
+    throw new Error("Customer name is required for Other Customer.")
+  }
+
   const dateCode = new Date().toISOString().slice(0, 10).replace(/-/g, "") // YYYYMMDD
   const labelsNeeded = Math.ceil(totalQty / qtyPerLabel)
   
@@ -45,6 +50,7 @@ export async function generateItemQR(formData: FormData) {
       supplierId,
       inspector,
       customer,
+      customerName: customer === "Other" ? customerName : null,
       qty: qtyPerLabel,
       totalQty,
       labelCount: labelsNeeded,

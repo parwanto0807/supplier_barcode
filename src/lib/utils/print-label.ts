@@ -89,6 +89,7 @@ const formatDate = (dateString?: string) => {
 };
 
 export const renderHondaLabelHtml = (item: any, qrSvg: string) => {
+  const receiver = item.customerName?.trim() || "PT. ASTRA HONDA MOTOR"
   return `
     <div class="label-container">
       <div class="header">PT. GRAFINDO MITRASEMESTA</div>
@@ -106,7 +107,7 @@ export const renderHondaLabelHtml = (item: any, qrSvg: string) => {
         </tr>
         <tr>
           <td class="label-cell">Penerima</td>
-          <td style="border-right: none; font-size: 6.5px;">: PT. ASTRA HONDA MOTOR</td>
+          <td style="border-right: none; font-size: 6.5px;">: ${receiver}</td>
         </tr>
         <tr>
           <td class="label-cell">Lot Produksi</td>
@@ -138,6 +139,7 @@ export const renderHondaLabelHtml = (item: any, qrSvg: string) => {
 }
 
 export const renderLabelHtml = (item: any, qrSvg: string) => {
+  const receiver = item.customerName?.trim() || "PT. YAMAHA INDONESIA MOTOR MFG"
   // Existing Yamaha Label
   return `
     <div class="label-container">
@@ -153,7 +155,7 @@ export const renderLabelHtml = (item: any, qrSvg: string) => {
         </tr>
         <tr>
           <td class="label-cell">Penerima</td>
-          <td colspan="2">: PT. YAMAHA INDONESIA MOTOR MFG</td>
+          <td colspan="2">: ${receiver}</td>
         </tr>
         <tr>
           <td class="label-cell">No. Lot</td>
@@ -171,7 +173,6 @@ export const renderLabelHtml = (item: any, qrSvg: string) => {
               <span>: ${item.qty} ${item.product.unit}</span>
               <div class="checkboxes">
                 <div class="check-item"><span class="box checked">OK</span></div>
-                <div class="check-item"><span class="box">NG</span></div>
               </div>
             </div>
           </td>
