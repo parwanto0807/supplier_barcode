@@ -15,7 +15,9 @@ import {
   Box,
   Hash,
   AlertCircle,
-  Calendar
+  Calendar,
+  Search,
+  ChevronDown
 } from "lucide-react"
 import { generateItemQR } from "@/lib/actions/items"
 import { printLabels } from "@/lib/utils/print-label"
@@ -30,7 +32,81 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
   // Derive unique part sets from products
   const partSets = Array.from(new Set(products.map((p: any) => p.partSet?.nameSet).filter(Boolean))).sort() as string[]
   const [selectedSetName, setSelectedSetName] = useState<string>("")
+  const [searchSetName, setSearchSetName] = useState<string>("")
+  const [searchPartNumber, setSearchPartNumber] = useState<string>("")
+  const [isOpenSet, setIsOpenSet] = useState(false)
+  const [isOpenPart, setIsOpenPart] = useState(false)
+  const [focusedIndexSet, setFocusedIndexSet] = useState(-1)
+  const [focusedIndexPart, setFocusedIndexPart] = useState(-1)
   const searchParams = useSearchParams()
+
+  const filteredPartSets = partSets.filter(setName => setName.toLowerCase().includes(searchSetName.toLowerCase()))
+  const filteredProducts = (selectedSetName 
+    ? products.filter((p: any) => p.partSet?.nameSet === selectedSetName)
+    : products
+  ).filter((p: any) => 
+    p.partNumber.toLowerCase().includes(searchPartNumber.toLowerCase()) || 
+    p.partName.toLowerCase().includes(searchPartNumber.toLowerCase())
+  )
+
+  const handleSetKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      if (!isOpenSet) setIsOpenSet(true)
+      setFocusedIndexSet(prev => Math.min(prev + 1, filteredPartSets.length))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setFocusedIndexSet(prev => Math.max(prev - 1, 0))
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      if (isOpenSet && focusedIndexSet >= 0) {
+        if (focusedIndexSet === 0) {
+          setSelectedSetName("")
+          setSearchSetName("")
+          setSelectedProduct(null)
+          setSearchPartNumber("")
+        } else {
+          const setName = filteredPartSets[focusedIndexSet - 1]
+          if (setName) {
+            setSelectedSetName(setName)
+            setSearchSetName(setName)
+            setSelectedProduct(null)
+            setSearchPartNumber("")
+          }
+        }
+        setIsOpenSet(false)
+        setFocusedIndexSet(-1)
+      }
+    } else if (e.key === 'Escape') {
+      setIsOpenSet(false)
+      setFocusedIndexSet(-1)
+    }
+  }
+
+  const handlePartKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      if (!isOpenPart) setIsOpenPart(true)
+      setFocusedIndexPart(prev => Math.min(prev + 1, filteredProducts.length - 1))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setFocusedIndexPart(prev => Math.max(prev - 1, 0))
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      if (isOpenPart && focusedIndexPart >= 0) {
+        const p = filteredProducts[focusedIndexPart]
+        if (p) {
+          setSelectedProduct(p)
+          setSearchPartNumber(`${p.partNumber} — ${p.partName}`)
+        }
+        setIsOpenPart(false)
+        setFocusedIndexPart(-1)
+      }
+    } else if (e.key === 'Escape') {
+      setIsOpenPart(false)
+      setFocusedIndexPart(-1)
+    }
+  }
 
   const initialProductId = searchParams.get("productId")
   const initialQty = searchParams.get("qty")
@@ -176,43 +252,99 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
             <div className="space-y-1">
               <label className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] px-1">Pilih Nama Set</label>
               <div className="relative">
-                <select
-                  value={selectedSetName}
+                <input
+                  type="text"
+                  placeholder="-- Semua Set / Cari Set --"
+                  value={searchSetName}
                   onChange={(e) => {
-                    setSelectedSetName(e.target.value)
-                    setSelectedProduct(null)
+                    setSearchSetName(e.target.value)
+                    setIsOpenSet(true)
+                    setFocusedIndexSet(-1)
                   }}
-                  className="w-full pl-8 pr-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all appearance-none text-xs"
-                >
-                  <option value="">-- Semua Set / Pilih Set --</option>
-                  {partSets.map((setName) => (
-                    <option key={setName} value={setName}>{setName}</option>
-                  ))}
-                </select>
+                  onFocus={() => setIsOpenSet(true)}
+                  onBlur={() => setTimeout(() => { setIsOpenSet(false); setFocusedIndexSet(-1) }, 200)}
+                  onKeyDown={handleSetKeyDown}
+                  className="w-full pl-8 pr-8 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all text-xs placeholder:text-slate-400"
+                />
                 <Package className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                <ChevronDown className={`absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 transition-transform ${isOpenSet ? 'rotate-180' : ''}`} />
+                
+                {isOpenSet && filteredPartSets.length > 0 && (
+                  <ul className="absolute z-50 w-full mt-1 max-h-48 overflow-y-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg py-1">
+                    <li
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => {
+                        setSelectedSetName("")
+                        setSearchSetName("")
+                        setSelectedProduct(null)
+                        setSearchPartNumber("")
+                        setIsOpenSet(false)
+                      }}
+                      className={`px-3 py-2 text-xs cursor-pointer italic ${focusedIndexSet === 0 ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300' : 'hover:bg-emerald-50 dark:hover:bg-emerald-500/10 text-slate-500'}`}
+                    >
+                      -- Reset / Semua Set --
+                    </li>
+                    {filteredPartSets.map((setName, index) => (
+                      <li
+                        key={setName}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => {
+                          setSelectedSetName(setName)
+                          setSearchSetName(setName)
+                          setSelectedProduct(null)
+                          setSearchPartNumber("")
+                          setIsOpenSet(false)
+                        }}
+                        className={`px-3 py-2 text-xs cursor-pointer font-medium ${focusedIndexSet === index + 1 ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300' : 'hover:bg-emerald-50 dark:hover:bg-emerald-500/10 text-slate-700 dark:text-slate-300'}`}
+                      >
+                        {setName}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
 
             <div className="space-y-1">
               <label className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] px-1">Pilih Part Number</label>
               <div className="relative">
-              <select
-                form="qr-form"
-                name="productId"
-                required
-                value={selectedProduct?.id || ""}
-                onChange={(e) => setSelectedProduct(products.find((p: any) => p.id === e.target.value))}
-                className="w-full pl-8 pr-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all appearance-none text-xs"
-              >
-                <option value="">-- Choose Part --</option>
-                {(selectedSetName 
-                  ? products.filter((p: any) => p.partSet?.nameSet === selectedSetName)
-                  : products
-                ).map((p: any) => (
-                  <option key={p.id} value={p.id}>{p.partNumber} — {p.partName}</option>
-                ))}
-              </select>
-              <Hash className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="-- Pilih Part / Cari --"
+                  value={searchPartNumber}
+                  onChange={(e) => {
+                    setSearchPartNumber(e.target.value)
+                    setIsOpenPart(true)
+                    setFocusedIndexPart(-1)
+                  }}
+                  onFocus={() => setIsOpenPart(true)}
+                  onBlur={() => setTimeout(() => { setIsOpenPart(false); setFocusedIndexPart(-1) }, 200)}
+                  onKeyDown={handlePartKeyDown}
+                  className="w-full pl-8 pr-8 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-bold focus:ring-2 focus:ring-emerald-500 outline-none transition-all text-xs placeholder:text-slate-400"
+                />
+                <Hash className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                <ChevronDown className={`absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 transition-transform ${isOpenPart ? 'rotate-180' : ''}`} />
+                
+                {isOpenPart && filteredProducts.length > 0 && (
+                  <ul className="absolute z-50 w-full mt-1 max-h-48 overflow-y-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg py-1">
+                    {filteredProducts.map((p: any, index: number) => (
+                      <li
+                        key={p.id}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={() => {
+                          setSelectedProduct(p)
+                          setSearchPartNumber(`${p.partNumber} — ${p.partName}`)
+                          setIsOpenPart(false)
+                        }}
+                        className={`px-3 py-2 text-xs cursor-pointer ${focusedIndexPart === index ? 'bg-emerald-100 dark:bg-emerald-500/20' : 'hover:bg-emerald-50 dark:hover:bg-emerald-500/10'}`}
+                      >
+                        <span className="font-bold text-slate-900 dark:text-white">{p.partNumber}</span> <span className="text-slate-500">— {p.partName}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                
+                <input type="hidden" name="productId" form="qr-form" value={selectedProduct?.id || ""} required />
               </div>
             </div>
 
