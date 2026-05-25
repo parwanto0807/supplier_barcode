@@ -37,7 +37,7 @@ export const LABEL_CSS = `
     }
   }
   body { 
-    font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+    font-family: 'Calibri Light', Calibri, sans-serif;
     background: #f1f5f9;
     display: flex;
     justify-content: center;
@@ -253,9 +253,6 @@ export async function printLabels(items: LabelItem[]) {
     <html>
       <head>
         <title></title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
         <style>${LABEL_CSS}</style>
       </head>
       <body>
