@@ -19,6 +19,8 @@ export default function SearchBar() {
       } else {
         params.delete("q")
       }
+      // Reset to first page on new search
+      params.delete("page")
       router.push(`/dashboard/history?${params.toString()}`)
     })
   }

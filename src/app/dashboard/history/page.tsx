@@ -1,13 +1,17 @@
 import prisma from "@/lib/prisma"
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
-import { History as HistoryIcon, Tag, User } from "lucide-react"
+import { History as HistoryIcon, Tag, User, ChevronLeft, ChevronRight } from "lucide-react"
 import HistoryActions from "@/components/dashboard/HistoryActions"
 import SearchBar from "@/components/dashboard/SearchBar"
+import Link from "next/link"
+
+const PAGE_SIZE = 10
 
 export default async function HistoryPage({ searchParams }: { searchParams: any }) {
   const params = await searchParams
   const query = params.q || ""
+  const currentPage = Math.max(1, parseInt(params.page || "1", 10))
   const session = await auth()
   if (!session) redirect("/login")
 
@@ -31,12 +35,43 @@ export default async function HistoryPage({ searchParams }: { searchParams: any 
     ]
   }
 
+  const totalCount = await prisma.item.count({ where: filter })
+  const cappedTotal = Math.min(totalCount, 200)
+  const totalPages = Math.max(1, Math.ceil(cappedTotal / PAGE_SIZE))
+  const safePage = Math.min(currentPage, totalPages)
+
   const items = await prisma.item.findMany({
     where: filter,
     include: { product: true, supplier: true },
-    take: 20,
+    take: PAGE_SIZE,
+    skip: (safePage - 1) * PAGE_SIZE,
     orderBy: { createdAt: "desc" }
   })
+
+  const buildPageUrl = (page: number) => {
+    const p = new URLSearchParams()
+    if (query) p.set("q", query)
+    p.set("page", String(page))
+    return `/dashboard/history?${p.toString()}`
+  }
+
+  // Build pagination range with ellipsis
+  const paginationRange = (): (number | "...")[] => {
+    const delta = 2
+    const range: (number | "...")[] = []
+    const left = safePage - delta
+    const right = safePage + delta
+
+    let prev: number | null = null
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === 1 || i === totalPages || (i >= left && i <= right)) {
+        if (prev !== null && i - prev > 1) range.push("...")
+        range.push(i)
+        prev = i
+      }
+    }
+    return range
+  }
 
   return (
     <div className="space-y-3 animate-in fade-in duration-700 font-inter">
@@ -51,8 +86,15 @@ export default async function HistoryPage({ searchParams }: { searchParams: any 
         <div className="flex-1">
           <SearchBar />
         </div>
-        <div className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">
-          {items.length} records
+        <div className="flex flex-col items-end gap-0.5">
+          <div className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest whitespace-nowrap">
+            {cappedTotal} records
+          </div>
+          {totalPages > 1 && (
+            <div className="text-[9px] font-bold text-slate-300 dark:text-slate-600 uppercase tracking-widest whitespace-nowrap">
+              Hal {safePage} / {totalPages}
+            </div>
+          )}
         </div>
       </div>
 
@@ -213,6 +255,61 @@ export default async function HistoryPage({ searchParams }: { searchParams: any 
           </div>
         ))}
       </div>
+
+      {/* ─── PAGINATION ─── */}
+      {cappedTotal > 0 && (
+        <div className="flex items-center justify-center gap-1 py-2 select-none">
+          {/* Prev */}
+          <Link
+            href={buildPageUrl(safePage - 1)}
+            aria-disabled={safePage <= 1}
+            className={`flex items-center justify-center w-8 h-8 rounded-lg border text-xs font-bold transition-all ${
+              safePage <= 1
+                ? "pointer-events-none opacity-30 border-slate-100 dark:border-slate-800 text-slate-400"
+                : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:border-indigo-300 dark:hover:border-indigo-500/30 hover:text-indigo-600 dark:hover:text-indigo-400"
+            }`}
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Link>
+
+          {/* Page numbers */}
+          {paginationRange().map((pageItem, idx) =>
+            pageItem === "..." ? (
+              <span
+                key={`ellipsis-${idx}`}
+                className="flex items-center justify-center w-8 h-8 text-xs font-bold text-slate-400 dark:text-slate-600"
+              >
+                …
+              </span>
+            ) : (
+              <Link
+                key={pageItem}
+                href={buildPageUrl(pageItem)}
+                className={`flex items-center justify-center w-8 h-8 rounded-lg border text-xs font-black transition-all ${
+                  pageItem === safePage
+                    ? "bg-indigo-600 border-indigo-600 text-white shadow-sm shadow-indigo-200 dark:shadow-indigo-900/30"
+                    : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:border-indigo-300 dark:hover:border-indigo-500/30 hover:text-indigo-600 dark:hover:text-indigo-400"
+                }`}
+              >
+                {pageItem}
+              </Link>
+            )
+          )}
+
+          {/* Next */}
+          <Link
+            href={buildPageUrl(safePage + 1)}
+            aria-disabled={safePage >= totalPages}
+            className={`flex items-center justify-center w-8 h-8 rounded-lg border text-xs font-bold transition-all ${
+              safePage >= totalPages
+                ? "pointer-events-none opacity-30 border-slate-100 dark:border-slate-800 text-slate-400"
+                : "border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:border-indigo-300 dark:hover:border-indigo-500/30 hover:text-indigo-600 dark:hover:text-indigo-400"
+            }`}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
