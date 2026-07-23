@@ -1,4 +1,7 @@
 import QRCode from "qrcode"
+import { customAlphabet } from "nanoid"
+
+const generateUniqueCode = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 8)
 
 interface Product {
   partName: string
@@ -67,10 +70,11 @@ export const LABEL_CSS = `
     border-radius: 1mm; 
     position: relative;
   }
-  .header { text-align: center; font-weight: 800; border-bottom: 0.05px solid #000; padding: 0px 2px; font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .header { text-align: center; font-weight: 800; border-bottom: 0.05px solid #000; padding: 0.5px 2px; font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.5px; }
   table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-  td { border: 0.15px solid #000; padding: 0.8px 2px; font-size: 7.5px; vertical-align: middle; overflow: hidden; white-space: nowrap; line-height: 1.1; }
-  .label-cell { width: 19mm; font-weight: bold; }
+  td { border: 0.15px solid #000; padding: 0.8px 2px; font-size: 8px; vertical-align: middle; overflow: hidden; white-space: nowrap; line-height: 1.1; }
+  .label-cell { width: 19mm; font-weight: bold; font-size: 8px; }
+  .auto-fit { white-space: nowrap; overflow: hidden; display: block; width: 100%; font-size: 8.5px; font-weight: bold; line-height: 1.1; }
   .qr-cell { width: 15mm; border-left: 0.05px solid #000; text-align: center; padding: 1px; vertical-align: middle; }
   .qr-cell svg { width: calc(11.5mm - 1px); height: calc(11.5mm - 1px); }
   .qr-cell-honda { 
@@ -115,38 +119,38 @@ export const renderHondaLabelHtml = (item: LabelItem, qrSvg: string) => {
       <table class="honda-table">
         <tr>
           <td class="label-cell">Nama Part</td>
-          <td style="border-right: none;">: ${item.product.partName}</td>
+          <td style="border-right: none;"><div class="auto-fit">: ${item.product.partName}</div></td>
           <td rowspan="4" class="qr-cell-honda">
              ${qrSvg}
           </td>
         </tr>
         <tr>
           <td class="label-cell">No. Part</td>
-          <td style="border-right: none;">: ${item.product.partNumber}</td>
+          <td style="border-right: none;"><div class="auto-fit">: ${item.product.partNumber}</div></td>
         </tr>
         <tr>
           <td class="label-cell">Penerima</td>
-          <td style="border-right: none; font-size: 6.5px;">: ${receiver}</td>
+          <td style="border-right: none;"><div class="auto-fit">: ${receiver}</div></td>
         </tr>
         <tr>
           <td class="label-cell">Lot Produksi</td>
-          <td style="border-right: none;">: ${item.noLotSpk}</td>
+          <td style="border-right: none;"><div class="auto-fit">: ${item.noLotSpk}</div></td>
         </tr>
         <tr>
           <td class="label-cell">Quantity</td>
-          <td colspan="2">: ${item.qty} ${item.product.unit}</td>
+          <td colspan="2"><div class="auto-fit">: ${item.qty} ${item.product.unit}</div></td>
         </tr>
         <tr>
           <td class="label-cell">Tgl. Packing</td>
-          <td colspan="2">: ${item.showPackingDate ? formatDate(item.packingDate) : ""}</td>
+          <td colspan="2"><div class="auto-fit">: ${item.showPackingDate ? formatDate(item.packingDate) : ""}</div></td>
         </tr>
         <tr>
           <td class="label-cell">Inspector</td>
           <td colspan="2">
             <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-              <span style="font-weight: 600;">: ${item.inspector}</span>
+              <span style="font-weight: bold; font-size: 8px;">: ${item.inspector}</span>
               <div style="display: flex; align-items: center; gap: 4px;">
-                <span style="font-weight: bold;">Status Part:</span>
+                <span style="font-weight: bold; font-size: 7.5px;">Status Part:</span>
                 <span class="box checked">OK</span>
               </div>
             </div>
@@ -166,19 +170,19 @@ export const renderLabelHtml = (item: LabelItem, qrSvg: string) => {
       <table>
         <tr>
           <td class="label-cell">Part Name</td>
-          <td colspan="2">: ${item.product.partName}</td>
+          <td colspan="2"><div class="auto-fit">: ${item.product.partName}</div></td>
         </tr>
         <tr>
           <td class="label-cell">Part Number</td>
-          <td colspan="2">: ${item.product.partNumber}</td>
+          <td colspan="2"><div class="auto-fit">: ${item.product.partNumber}</div></td>
         </tr>
         <tr>
           <td class="label-cell">Penerima</td>
-          <td colspan="2">: ${receiver}</td>
+          <td colspan="2"><div class="auto-fit">: ${receiver}</div></td>
         </tr>
         <tr>
           <td class="label-cell">No. Lot</td>
-          <td style="border-right: none;">: ${item.noLotSpk}</td>
+          <td style="border-right: none;"><div class="auto-fit">: ${item.noLotSpk}</div></td>
           <td rowspan="4" class="qr-cell">
              <div style="display: flex; justify-content: center;">
                ${qrSvg}
@@ -189,7 +193,7 @@ export const renderLabelHtml = (item: LabelItem, qrSvg: string) => {
           <td class="label-cell">Qty</td>
           <td style="border-right: none;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span>: ${item.qty} ${item.product.unit}</span>
+              <span style="font-weight: bold; font-size: 8.5px;">: ${item.qty} ${item.product.unit}</span>
               <div class="checkboxes">
                 <div class="check-item"><span class="box checked">OK</span></div>
               </div>
@@ -198,11 +202,11 @@ export const renderLabelHtml = (item: LabelItem, qrSvg: string) => {
         </tr>
         <tr>
           <td class="label-cell">Tgl. Packing</td>
-          <td style="border-right: none;">: ${item.showPackingDate ? formatDate(item.packingDate) : ""}</td>
+          <td style="border-right: none;"><div class="auto-fit">: ${item.showPackingDate ? formatDate(item.packingDate) : ""}</div></td>
         </tr>
         <tr>
           <td class="label-cell">Opr. Packing</td>
-          <td style="border-right: none;">: ${item.inspector}</td>
+          <td style="border-right: none;"><div class="auto-fit">: ${item.inspector}</div></td>
         </tr>
       </table>
     </div>
@@ -225,11 +229,14 @@ export async function printLabels(items: LabelItem[]) {
         ? (totalQty % qtyPerLabel || qtyPerLabel)
         : qtyPerLabel
 
+      const series = String(i + 1).padStart(3, '0')
+      const uniqueCode = generateUniqueCode()
+
       let specificBarcode = ""
       if (item.customer === "Honda") {
-        specificBarcode = `${item.product.partNumber}|1201591|${currentQty}|${item.noLotSpk}`
+        specificBarcode = `${item.product.partNumber}|1201591|${currentQty}|${item.noLotSpk}-${series}|${uniqueCode}`
       } else {
-        specificBarcode = `${item.product.partNumber} ${currentQty} ${item.noLotSpk}`
+        specificBarcode = `${item.product.partNumber} ${currentQty} ${item.noLotSpk}-${series} ${uniqueCode}`
       }
 
       const qrSvg = await QRCode.toString(specificBarcode, {
@@ -260,9 +267,21 @@ export async function printLabels(items: LabelItem[]) {
           ${allLabelsHtml}
         </div>
         <script>
+          function fitText() {
+            document.querySelectorAll('.auto-fit').forEach(function(el) {
+              let size = parseFloat(window.getComputedStyle(el).fontSize);
+              while (el.scrollWidth > el.clientWidth && size > 4.5) {
+                size -= 0.15;
+                el.style.fontSize = size + 'px';
+              }
+            });
+          }
           window.onload = () => {
-            window.print();
-            window.onafterprint = () => window.close();
+            fitText();
+            setTimeout(() => {
+              window.print();
+              window.onafterprint = () => window.close();
+            }, 50);
           }
         </script>
       </body>
@@ -270,3 +289,4 @@ export async function printLabels(items: LabelItem[]) {
   `)
   printWindow.document.close()
 }
+
