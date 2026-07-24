@@ -532,7 +532,7 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
             ) : generatedItems && generatedItems.length > 0 ? (
               <div className="w-full space-y-3 animate-in zoom-in-95 duration-500">
                 <div className="p-3 bg-white rounded-xl shadow-inner border border-slate-100 flex items-center justify-center overflow-hidden">
-                  <QRCodeSVG value={generatedItems[0].barcode} size={150} level="H" />
+                  <QRCodeSVG value={generatedItems[0].barcode} size={150} level="M" marginSize={1} />
                 </div>
 
                 <div className="space-y-2">

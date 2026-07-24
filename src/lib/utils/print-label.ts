@@ -76,7 +76,7 @@ export const LABEL_CSS = `
   .label-cell { width: 18.5mm; font-weight: bold; font-size: 8px; }
   .auto-fit { white-space: nowrap; overflow: hidden; display: block; width: 100%; font-size: 8.5px; font-weight: bold; line-height: 1.05; }
   .qr-cell { width: 14mm; border-left: 0.05px solid #000; text-align: center; padding: 1px; vertical-align: middle; }
-  .qr-cell svg { width: 12mm; height: 12mm; margin: 0 auto; display: block; }
+  .qr-cell svg { width: 12mm; height: 12mm; margin: 0 auto; display: block; shape-rendering: crispEdges; }
   .qr-cell-honda { 
     width: 12mm; 
     border-left: 0.15px solid #000; 
@@ -84,7 +84,8 @@ export const LABEL_CSS = `
     vertical-align: middle; 
     padding: 0.5px;
   }
-  .qr-cell-honda svg { width: 11.2mm; height: 11.2mm; margin: 0 auto; display: block; }
+  .qr-cell-honda svg { width: 11.2mm; height: 11.2mm; margin: 0 auto; display: block; shape-rendering: crispEdges; }
+  svg path { shape-rendering: crispEdges; }
   .honda-table td { padding: 0.55px 2px; }
   .checkboxes { display: flex; gap: 1px; align-items: center; }
   .check-item { display: flex; align-items: center; gap: 0.5mm; }
@@ -241,7 +242,8 @@ export async function printLabels(items: LabelItem[]) {
 
       const qrSvg = await QRCode.toString(specificBarcode, {
         type: 'svg',
-        margin: 0,
+        margin: 1,
+        errorCorrectionLevel: 'M',
         width: 256,
         color: { dark: '#000000', light: '#ffffff' }
       })
