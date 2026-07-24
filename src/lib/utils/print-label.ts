@@ -213,7 +213,7 @@ export const renderLabelHtml = (item: LabelItem, qrDataUrl: string) => {
   `
 }
 
-export async function printLabels(items: LabelItem[]) {
+export async function printLabels(items: LabelItem[], includeUniqueCode: boolean = false) {
   const printWindow = window.open("", "_blank")
   if (!printWindow) return
 
@@ -234,9 +234,13 @@ export async function printLabels(items: LabelItem[]) {
 
       let specificBarcode = ""
       if (item.customer === "Honda") {
-        specificBarcode = `${item.product.partNumber}|1201591|${currentQty}|${item.noLotSpk}-${series}|${uniqueCode}`
+        specificBarcode = includeUniqueCode
+          ? `${item.product.partNumber}|1201591|${currentQty}|${item.noLotSpk}-${series}|${uniqueCode}`
+          : `${item.product.partNumber}|1201591|${currentQty}|${item.noLotSpk}-${series}`
       } else {
-        specificBarcode = `${item.product.partNumber} ${currentQty} ${item.noLotSpk}-${series} ${uniqueCode}`
+        specificBarcode = includeUniqueCode
+          ? `${item.product.partNumber} ${currentQty} ${item.noLotSpk}-${series} ${uniqueCode}`
+          : `${item.product.partNumber} ${currentQty} ${item.noLotSpk}-${series}`
       }
 
       const qrDataUrl = await QRCode.toDataURL(specificBarcode, {

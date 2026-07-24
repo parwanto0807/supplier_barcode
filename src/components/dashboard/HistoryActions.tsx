@@ -5,16 +5,19 @@ import Link from "next/link"
 import { printLabels } from "@/lib/utils/print-label"
 import { deleteItem } from "@/lib/actions/items"
 import { useState } from "react"
+import PrintOptionsModal from "./PrintOptionsModal"
 
 export default function HistoryActions({ item }: { item: any }) {
   const [isPrinting, setIsPrinting] = useState(false)
+  const [showPrintModal, setShowPrintModal] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
-  const handleDirectPrint = async () => {
+  const handlePrintConfirm = async (includeUniqueCode: boolean) => {
     setIsPrinting(true)
+    setShowPrintModal(false)
     try {
-      await printLabels([item])
+      await printLabels([item], includeUniqueCode)
     } catch (error) {
       console.error("Print failed", error)
     } finally {
@@ -38,7 +41,7 @@ export default function HistoryActions({ item }: { item: any }) {
     <>
       <div className="flex items-center justify-end gap-1.5">
         <button
-          onClick={handleDirectPrint}
+          onClick={() => setShowPrintModal(true)}
           disabled={isPrinting}
           className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition-all disabled:opacity-50"
         >
@@ -107,6 +110,14 @@ export default function HistoryActions({ item }: { item: any }) {
           </div>
         </div>
       )}
+
+      <PrintOptionsModal
+        isOpen={showPrintModal}
+        onClose={() => setShowPrintModal(false)}
+        onConfirm={handlePrintConfirm}
+        isPrinting={isPrinting}
+        itemCount={item.labelCount || 1}
+      />
     </>
   )
 }

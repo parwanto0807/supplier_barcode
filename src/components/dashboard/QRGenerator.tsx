@@ -21,6 +21,7 @@ import {
 } from "lucide-react"
 import { generateItemQR } from "@/lib/actions/items"
 import { printLabels } from "@/lib/utils/print-label"
+import PrintOptionsModal from "@/components/dashboard/PrintOptionsModal"
 
 export default function QRGenerator({ products, suppliers, supplier, userRole }: any) {
   const [loading, setLoading] = useState(false)
@@ -145,9 +146,25 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
     }
   }
 
-  const handlePrint = async () => {
+  const [showPrintModal, setShowPrintModal] = useState(false)
+  const [isPrinting, setIsPrinting] = useState(false)
+
+  const handlePrintClick = () => {
     if (!generatedItems || generatedItems.length === 0) return
-    await printLabels(generatedItems)
+    setShowPrintModal(true)
+  }
+
+  const handlePrintConfirm = async (includeUniqueCode: boolean) => {
+    if (!generatedItems || generatedItems.length === 0) return
+    setIsPrinting(true)
+    setShowPrintModal(false)
+    try {
+      await printLabels(generatedItems, includeUniqueCode)
+    } catch (err) {
+      console.error("Print failed", err)
+    } finally {
+      setIsPrinting(false)
+    }
   }
 
   return (
@@ -544,8 +561,9 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
                   </div>
 
                   <button
-                    onClick={handlePrint}
-                    className="w-full py-2.5 bg-slate-900 dark:bg-indigo-600 text-white font-black rounded-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 group uppercase tracking-widest text-xs"
+                    onClick={handlePrintClick}
+                    disabled={isPrinting}
+                    className="w-full py-2.5 bg-slate-900 dark:bg-indigo-600 text-white font-black rounded-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 group uppercase tracking-widest text-xs disabled:opacity-50"
                   >
                     <Printer className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                     Print All {generatedItems.length}
@@ -586,6 +604,14 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
         </div>
 
       </div>
+
+      <PrintOptionsModal
+        isOpen={showPrintModal}
+        onClose={() => setShowPrintModal(false)}
+        onConfirm={handlePrintConfirm}
+        isPrinting={isPrinting}
+        itemCount={generatedItems?.length || 1}
+      />
     </div>
   )
 }
