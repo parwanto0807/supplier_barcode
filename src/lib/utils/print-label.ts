@@ -76,7 +76,7 @@ export const LABEL_CSS = `
   .label-cell { width: 18.5mm; font-weight: bold; font-size: 8px; }
   .auto-fit { white-space: nowrap; overflow: hidden; display: block; width: 100%; font-size: 8.5px; font-weight: bold; line-height: 1.05; }
   .qr-cell { width: 14mm; border-left: 0.05px solid #000; text-align: center; padding: 1px; vertical-align: middle; }
-  .qr-cell svg { width: 12mm; height: 12mm; margin: 0 auto; display: block; shape-rendering: crispEdges; }
+  .qr-cell img { width: 12mm; height: 12mm; margin: 0 auto; display: block; image-rendering: pixelated; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
   .qr-cell-honda { 
     width: 12mm; 
     border-left: 0.15px solid #000; 
@@ -84,8 +84,7 @@ export const LABEL_CSS = `
     vertical-align: middle; 
     padding: 0.5px;
   }
-  .qr-cell-honda svg { width: 11.2mm; height: 11.2mm; margin: 0 auto; display: block; shape-rendering: crispEdges; }
-  svg path { shape-rendering: crispEdges; }
+  .qr-cell-honda img { width: 11.2mm; height: 11.2mm; margin: 0 auto; display: block; image-rendering: pixelated; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
   .honda-table td { padding: 0.55px 2px; }
   .checkboxes { display: flex; gap: 1px; align-items: center; }
   .check-item { display: flex; align-items: center; gap: 0.5mm; }
@@ -112,7 +111,7 @@ const formatDate = (dateString?: string) => {
   return `${day}-${monthName}-${year}`;
 };
 
-export const renderHondaLabelHtml = (item: LabelItem, qrSvg: string) => {
+export const renderHondaLabelHtml = (item: LabelItem, qrDataUrl: string) => {
   const receiver = item.customerName?.trim() || "PT. ASTRA HONDA MOTOR"
   return `
     <div class="label-container">
@@ -122,7 +121,7 @@ export const renderHondaLabelHtml = (item: LabelItem, qrSvg: string) => {
           <td class="label-cell">Nama Part</td>
           <td style="border-right: none;"><div class="auto-fit">: ${item.product.partName}</div></td>
           <td rowspan="4" class="qr-cell-honda">
-             ${qrSvg}
+             <img src="${qrDataUrl}" alt="QR Code" style="width: 11.2mm; height: 11.2mm; display: block; margin: 0 auto; image-rendering: pixelated;" />
           </td>
         </tr>
         <tr>
@@ -162,7 +161,7 @@ export const renderHondaLabelHtml = (item: LabelItem, qrSvg: string) => {
   `
 }
 
-export const renderLabelHtml = (item: LabelItem, qrSvg: string) => {
+export const renderLabelHtml = (item: LabelItem, qrDataUrl: string) => {
   const receiver = item.customerName?.trim() || "PT. YAMAHA INDONESIA MOTOR MFG"
   // Existing Yamaha Label
   return `
@@ -186,7 +185,7 @@ export const renderLabelHtml = (item: LabelItem, qrSvg: string) => {
           <td style="border-right: none;"><div class="auto-fit">: ${item.noLotSpk}</div></td>
           <td rowspan="4" class="qr-cell">
              <div style="display: flex; justify-content: center;">
-               ${qrSvg}
+               <img src="${qrDataUrl}" alt="QR Code" style="width: 12mm; height: 12mm; display: block; margin: 0 auto; image-rendering: pixelated;" />
              </div>
           </td>
         </tr>
@@ -240,20 +239,19 @@ export async function printLabels(items: LabelItem[]) {
         specificBarcode = `${item.product.partNumber} ${currentQty} ${item.noLotSpk}-${series} ${uniqueCode}`
       }
 
-      const qrSvg = await QRCode.toString(specificBarcode, {
-        type: 'svg',
+      const qrDataUrl = await QRCode.toDataURL(specificBarcode, {
+        width: 300,
         margin: 1,
         errorCorrectionLevel: 'M',
-        width: 256,
         color: { dark: '#000000', light: '#ffffff' }
       })
 
       const labelItem = { ...item, qty: currentQty }
 
       if (item.customer === "Honda") {
-        allLabelsHtml += renderHondaLabelHtml(labelItem, qrSvg)
+        allLabelsHtml += renderHondaLabelHtml(labelItem, qrDataUrl)
       } else {
-        allLabelsHtml += renderLabelHtml(labelItem, qrSvg)
+        allLabelsHtml += renderLabelHtml(labelItem, qrDataUrl)
       }
     }
   }
