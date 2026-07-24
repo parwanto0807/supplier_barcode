@@ -70,22 +70,22 @@ export const LABEL_CSS = `
     border-radius: 1mm; 
     position: relative;
   }
-  .header { text-align: center; font-weight: 800; border-bottom: 0.05px solid #000; padding: 0.5px 2px; font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .header { text-align: center; font-weight: 800; border-bottom: 0.05px solid #000; padding: 0.4px 2px; font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.1; }
   table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-  td { border: 0.15px solid #000; padding: 0.8px 2px; font-size: 8px; vertical-align: middle; overflow: hidden; white-space: nowrap; line-height: 1.1; }
-  .label-cell { width: 19mm; font-weight: bold; font-size: 8px; }
-  .auto-fit { white-space: nowrap; overflow: hidden; display: block; width: 100%; font-size: 8.5px; font-weight: bold; line-height: 1.1; }
-  .qr-cell { width: 15mm; border-left: 0.05px solid #000; text-align: center; padding: 1px; vertical-align: middle; }
-  .qr-cell svg { width: calc(11.5mm - 1px); height: calc(11.5mm - 1px); }
+  td { border: 0.15px solid #000; padding: 0.55px 2px; font-size: 8px; vertical-align: middle; overflow: hidden; white-space: nowrap; line-height: 1.05; }
+  .label-cell { width: 18.5mm; font-weight: bold; font-size: 8px; }
+  .auto-fit { white-space: nowrap; overflow: hidden; display: block; width: 100%; font-size: 8.5px; font-weight: bold; line-height: 1.05; }
+  .qr-cell { width: 14mm; border-left: 0.05px solid #000; text-align: center; padding: 1px; vertical-align: middle; }
+  .qr-cell svg { width: 12mm; height: 12mm; margin: 0 auto; display: block; }
   .qr-cell-honda { 
-    width: 11mm; 
+    width: 12mm; 
     border-left: 0.15px solid #000; 
-    text-align: right; 
+    text-align: center; 
     vertical-align: middle; 
-    padding: 1px;
+    padding: 0.5px;
   }
-  .qr-cell-honda svg { width: 11mm; height: 11mm; }
-  .honda-table td { padding: 0.8px 2px; }
+  .qr-cell-honda svg { width: 11.2mm; height: 11.2mm; margin: 0 auto; display: block; }
+  .honda-table td { padding: 0.55px 2px; }
   .checkboxes { display: flex; gap: 1px; align-items: center; }
   .check-item { display: flex; align-items: center; gap: 0.5mm; }
   .box { 
@@ -147,7 +147,7 @@ export const renderHondaLabelHtml = (item: LabelItem, qrSvg: string) => {
         <tr>
           <td class="label-cell">Inspector</td>
           <td colspan="2">
-            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; line-height: 1;">
               <span style="font-weight: bold; font-size: 8px;">: ${item.inspector}</span>
               <div style="display: flex; align-items: center; gap: 4px;">
                 <span style="font-weight: bold; font-size: 7.5px;">Status Part:</span>
@@ -242,7 +242,7 @@ export async function printLabels(items: LabelItem[]) {
       const qrSvg = await QRCode.toString(specificBarcode, {
         type: 'svg',
         margin: 0,
-        width: item.customer === "Honda" ? 64 : 128,
+        width: 256,
         color: { dark: '#000000', light: '#ffffff' }
       })
 

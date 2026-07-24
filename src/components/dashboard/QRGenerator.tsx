@@ -3,13 +3,13 @@
 import { useState, useRef, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { QRCodeSVG } from "qrcode.react"
-import { 
-  Loader2, 
-  QrCode, 
-  Printer, 
-  User, 
-  Package, 
-  Calculator, 
+import {
+  Loader2,
+  QrCode,
+  Printer,
+  User,
+  Package,
+  Calculator,
   ClipboardCheck,
   Building2,
   Box,
@@ -28,7 +28,7 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
   const [selectedProduct, setSelectedProduct] = useState<any>(null)
   const [totalQty, setTotalQty] = useState(1000)
   const [qtyPerLabel, setQtyPerLabel] = useState(100)
-  
+
   // Derive unique part sets from products
   const partSets = Array.from(new Set(products.map((p: any) => p.partSet?.nameSet).filter(Boolean))).sort() as string[]
   const [selectedSetName, setSelectedSetName] = useState<string>("")
@@ -41,11 +41,11 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
   const searchParams = useSearchParams()
 
   const filteredPartSets = partSets.filter(setName => setName.toLowerCase().includes(searchSetName.toLowerCase()))
-  const filteredProducts = (selectedSetName 
+  const filteredProducts = (selectedSetName
     ? products.filter((p: any) => p.partSet?.nameSet === selectedSetName)
     : products
-  ).filter((p: any) => 
-    p.partNumber.toLowerCase().includes(searchPartNumber.toLowerCase()) || 
+  ).filter((p: any) =>
+    p.partNumber.toLowerCase().includes(searchPartNumber.toLowerCase()) ||
     p.partName.toLowerCase().includes(searchPartNumber.toLowerCase())
   )
 
@@ -152,10 +152,10 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
 
   return (
     <div className="flex flex-col xl:flex-row gap-4 items-start animate-in fade-in duration-700 font-inter">
-      
+
       {/* Form Section */}
       <div className="flex-1 space-y-3 w-full">
-        
+
         {/* Step 1: Identity & Authorization */}
         <section className="bg-white dark:bg-[#0f172a] p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 transition-all hover:border-indigo-500/30">
           <div className="flex items-center gap-2.5 mb-3">
@@ -268,7 +268,7 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
                 />
                 <Package className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                 <ChevronDown className={`absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 transition-transform ${isOpenSet ? 'rotate-180' : ''}`} />
-                
+
                 {isOpenSet && filteredPartSets.length > 0 && (
                   <ul className="absolute z-50 w-full mt-1 max-h-48 overflow-y-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg py-1">
                     <li
@@ -324,7 +324,7 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
                 />
                 <Hash className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                 <ChevronDown className={`absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 transition-transform ${isOpenPart ? 'rotate-180' : ''}`} />
-                
+
                 {isOpenPart && filteredProducts.length > 0 && (
                   <ul className="absolute z-50 w-full mt-1 max-h-48 overflow-y-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg py-1">
                     {filteredProducts.map((p: any, index: number) => (
@@ -343,7 +343,7 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
                     ))}
                   </ul>
                 )}
-                
+
                 <input type="hidden" name="productId" form="qr-form" value={selectedProduct?.id || ""} required />
               </div>
             </div>
@@ -475,7 +475,7 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
             <div className="flex items-center gap-3 pt-3">
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" name="showPackingDate" defaultChecked className="sr-only peer" form="qr-form" value="true" />
-                <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
                 <span className="ms-2 text-[9px] font-black text-slate-500 uppercase tracking-wider">Tampilkan di Label?</span>
               </label>
             </div>
@@ -506,8 +506,8 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
       </div>
 
       {/* Preview Section */}
-      <div className="w-full xl:w-[300px] xl:sticky xl:top-4 flex flex-col gap-3">
-        
+      <div className="w-full xl:w-75 xl:sticky xl:top-4 flex flex-col gap-3">
+
         <div className="bg-white dark:bg-[#0f172a] rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
           <div className="px-4 py-2.5 border-b border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 flex items-center justify-between">
             <h4 className="font-black text-[9px] uppercase tracking-widest text-slate-400">Preview</h4>
@@ -517,7 +517,7 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             </div>
           </div>
-          
+
           <div className="p-4 flex flex-col items-center">
             {loading ? (
               <div className="w-full space-y-3 animate-pulse">
@@ -534,7 +534,7 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
                 <div className="p-3 bg-white rounded-xl shadow-inner border border-slate-100 flex items-center justify-center overflow-hidden">
                   <QRCodeSVG value={generatedItems[0].barcode} size={150} level="H" />
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="bg-slate-50 dark:bg-slate-900 p-2.5 rounded-lg border border-slate-100 dark:border-slate-800">
                     <p className="text-[7px] font-black text-slate-400 uppercase tracking-widest mb-1">ID BARCODE</p>
@@ -566,7 +566,7 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
         {/* Compact Info Legend */}
         <div className="bg-indigo-600 rounded-xl p-4 text-white relative overflow-hidden">
           <div className="relative z-10 flex items-start gap-2.5">
-            <AlertCircle className="w-3.5 h-3.5 text-indigo-200 mt-0.5 flex-shrink-0" />
+            <AlertCircle className="w-3.5 h-3.5 text-indigo-200 mt-0.5 shrink-0" />
             <div className="space-y-1.5">
               <h5 className="font-black text-[10px] uppercase italic">QC Standar Industri</h5>
               <ul className="space-y-1">
@@ -576,7 +576,7 @@ export default function QRGenerator({ products, suppliers, supplier, userRole }:
                   "1 label = 1 pack fisik"
                 ].map((txt: string, i: number) => (
                   <li key={i} className="flex items-center gap-1.5 text-[8px] font-bold text-indigo-100">
-                    <div className="w-1 h-1 rounded-full bg-indigo-300 flex-shrink-0" />
+                    <div className="w-1 h-1 rounded-full bg-indigo-300 shrink-0" />
                     {txt}
                   </li>
                 ))}
